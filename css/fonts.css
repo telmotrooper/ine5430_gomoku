@@ -1,0 +1,37 @@
+@font-face {
+	font-family: 'Gloria Hallelujah';
+	font-style: normal;
+	font-weight: normal;
+	src:
+		local('Gloria Hallelujah'),
+		local('GloriaHallelujah'),
+		/* from https://fonts.gstatic.com/s/gloriahallelujah/v9/LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zc.eot */
+		url('../fonts/Gloria_Hallelujah.eot?#iefix') format('embedded-opentype'),
+		/* from https://fonts.gstatic.com/s/gloriahallelujah/v9/LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zU.woff */
+		url('../fonts/Gloria_Hallelujah.woff') format('woff'),
+		/* from https://fonts.gstatic.com/s/gloriahallelujah/v9/LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zM.woff2 */
+		url('../fonts/Gloria_Hallelujah.woff2') format('woff2'),
+		/* from https://fonts.gstatic.com/l/font?kit=LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zQ&skey=6624637ba47a20&v=v9#GloriaHallelujah */
+		url('../fonts/Gloria_Hallelujah.svg#GloriaHallelujah') format('svg'),
+		/* from https://fonts.gstatic.com/s/gloriahallelujah/v9/LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zY.ttf */
+		url('../fonts/Gloria_Hallelujah.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans Condensed';
+	font-style: normal;
+	font-weight: 300;
+	src:
+		local('Open Sans Condensed Light'),
+		local('OpenSansCondensed-Light'),
+		/* from https://fonts.gstatic.com/s/opensanscondensed/v12/z7NFdQDnbTkabZAIOl9il_O6KJj73e7Ff1GhDuXMQw.eot */
+		url('../fonts/Open_Sans_Condensed_300.eot?#iefix') format('embedded-opentype'),
+		/* from https://fonts.gstatic.com/s/opensanscondensed/v12/z7NFdQDnbTkabZAIOl9il_O6KJj73e7Ff1GhDuXMQQ.woff */
+		url('../fonts/Open_Sans_Condensed_300.woff') format('woff'),
+		/* from https://fonts.gstatic.com/s/opensanscondensed/v12/z7NFdQDnbTkabZAIOl9il_O6KJj73e7Ff1GhDuXMRw.woff2 */
+		url('../fonts/Open_Sans_Condensed_300.woff2') format('woff2'),
+		/* from https://fonts.gstatic.com/l/font?kit=z7NFdQDnbTkabZAIOl9il_O6KJj73e7Ff1GhDuXMQA&skey=2f86f64984be1bbf&v=v12#OpenSansCondensed */
+		url('../fonts/Open_Sans_Condensed_300.svg#OpenSansCondensed') format('svg'),
+		/* from https://fonts.gstatic.com/s/opensanscondensed/v12/z7NFdQDnbTkabZAIOl9il_O6KJj73e7Ff1GhDuXMQg.ttf */
+		url('../fonts/Open_Sans_Condensed_300.ttf') format('truetype');
+}

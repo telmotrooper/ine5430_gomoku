@@ -1,0 +1,42 @@
+body {
+	text-align: center;
+	padding-top: 25px;
+	/* font-family: "Open Sans Condensed", sans-serif; */
+	background-image: url("../img/wood-tile.jpg")
+}
+
+h1 {
+	font-family: "Gloria Hallelujah", cursive;
+}
+
+table {
+	border-spacing: 0px;
+	border-collapse: collapse;
+	background-image: url("../img/board-tile.png");
+}
+
+td {
+	text-align: center;
+	font-size: 0;
+	/* border: 1px solid black; */
+	height: 30px;
+	width: 30px;
+	padding: 0px;
+	/* background-image: url("../img/board-tile.png"); */
+}
+
+.black {
+	background-image: url("../img/black-piece.png");
+}
+
+.white {
+	background-image: url("../img/white-piece.png");
+}
+
+.margin-auto {
+	margin: 0 auto;
+}
+
+.w-10 {
+	width: 10%;
+}

@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Gomoku</title>
+
+		<!-- 3rd party dependencies -->
+		<script src="lib/jquery-3.3.1.min.js"></script>
+		<script src="lib/popper-1.14.1.min.js"></script>
+		<script src="lib/bootstrap-4.0.0.min.js"></script>
+
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/fonts.css">
+
+		<!-- 1st party dependencies -->
+		<script src="src/board.js"></script>
+		<script src="src/main.js"></script>
+		
+
+		<link rel="stylesheet" href="css/index.css">
+	</head>
+	<body>
+		<div class="container">
+			<h1>Gomoku</h1>
+
+			<table id="board" align="center">
+				<!-- Populated by jQuery -->
+			</table>
+  
+			<!-- Modals -->
+			<div class="modal fade" id="pick-color" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title margin-auto">Escolha uma cor</h5>
+						</div>
+						<div class="modal-body text-center">
+							<a onclick="pickColor('black')"><img class="img-fluid w-10" src="img/black-piece.png" alt="black"></a>
+							<a onclick="pickColor('white')"><img class="img-fluid w-10" src="img/white-piece.png" alt="white"></a>
+						</div>
+						<div class="modal-footer">
+							<p class="margin-auto"><strong>Observação:</strong> A peça preta é a que começa o jogo.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="end-game" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title margin-auto" id="end-game-header"></h5>
+						</div>
+						<div class="modal-body text-center">
+							<p><strong>Valor de utilidade:</strong> <span id="utility">#TODO</span></p>
+						</div>
+						<div class="modal-footer">
+							<a onclick="location.reload();"><button class="btn btn-info">Jogar novamente</button></a>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+	</body>
+</html>
