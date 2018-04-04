@@ -23,10 +23,16 @@ class IA {
 			}
 		}
 
+		/* Calculate the heuristic for the board as it is */
+		let playerHeuristic = this.heuristic(ownMatrix, lastMove, null, lastMove[2]);
+
 		/* Calculate the heuristic for each empty slot in the board */
 		for(let i = 0; i < emptySlots.length; i++) {
 			let ownMatrix = board.getMatrixCopy();
-			this.heuristic(ownMatrix, lastMove, emptySlots[i], computerColor);
+			let computerHeuristic = this.heuristic(ownMatrix, lastMove, emptySlots[i], computerColor);
+			let totalHeuristic = computerHeuristic - playerHeuristic;
+
+			console.log(`Attempt at ${emptySlots[i][0]},${emptySlots[i][1]} has value ${totalHeuristic}`);
 		}
 
 		let bestMove = emptySlots[Math.floor(Math.random() * emptySlots.length)];
@@ -36,12 +42,20 @@ class IA {
 
 	heuristic(matrix, lastMove, moveAttempt, color) {
 		let heuristicValue = 0;
+		let x = null;
+		let y = null;
 
-		/* Play the piece in the matrix copy */
-		matrix[moveAttempt[0]][moveAttempt[1]] = color;
-		
-		let x = parseInt(moveAttempt[0]);
-		let y = parseInt(moveAttempt[1]);
+
+		if(moveAttempt != null) {	// If trying to calculate a move attempt
+			/* Play the piece in the matrix copy */
+			matrix[moveAttempt[0]][moveAttempt[1]] = color;
+
+			x = parseInt(moveAttempt[0]);
+			y = parseInt(moveAttempt[1]);
+		} else {	// If calculating the board without a new move
+			x = parseInt(lastMove[0]);
+			y = parseInt(lastMove[1]);
+		}
 
 		let horizontal = [];
 		for(let i = y - 4; i <= y + 4; i++) {
@@ -77,7 +91,9 @@ class IA {
 		}
 		heuristicValue += this.countSequence(color, diagonalB);
 
-		console.log(`Attempt at ${x},${y} has value ${heuristicValue}`);
+		// if(moveAttempt != null) {
+		// 	console.log(`Attempt at ${x},${y} has value ${heuristicValue}`);
+		// }
 		return heuristicValue;
 	}
 
