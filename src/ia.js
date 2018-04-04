@@ -1,10 +1,12 @@
 class IA {
-	constructor() {
-		// TODO
+	constructor(depth) {
+		this.depth = depth;
 	}
 
-	play(board) {
+	getBestMove(board) {
 		// TODO
 		console.log("IA's turn");
+
+		return [7,7];
 	}
 }

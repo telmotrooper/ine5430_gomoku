@@ -3,6 +3,7 @@ $(document).ready(function() {
 	$("#pick-color").modal("show");
 	
 	b = new Board(15);
+	ia = new IA(2);
 	let matrix = b.getMatrix();
 
 	/* Drawing board from the matrix */
@@ -48,11 +49,20 @@ function switchColor() {
 }
 
 function play(x, y) {
+	/* PLAYER TURN */
 	b.play(color, x, y);
 	$(`#square-${x}-${y}`).addClass(color);
 
 	b.printMatrix();
-
 	switchColor();
 	checkVictory(x, y);
+
+	/* COMPUTER TURN */
+	let iaMove = ia.getBestMove(b);
+	b.play(color, iaMove[0], iaMove[1]);
+	$(`#square-${iaMove[0]}-${iaMove[1]}`).addClass(color);
+
+	b.printMatrix();
+	switchColor();
+	checkVictory(iaMove[0], iaMove[1]);
 }
