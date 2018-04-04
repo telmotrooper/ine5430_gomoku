@@ -23,8 +23,15 @@ class IA {
 			}
 		}
 
-		/* Calculate the heuristic for the board as it is */
-		let playerHeuristic = this.heuristic(ownMatrix, lastMove, null, lastMove[2]);
+		let playerHeuristic = null;
+
+		if(lastMove != null) {
+			/* Calculate the heuristic for the board as it is */
+			playerHeuristic = this.heuristic(ownMatrix, lastMove, null, lastMove[2]);
+		} else {	// If the board is empty
+			playerHeuristic = 0;
+		}
+		
 
 		/* Calculate the heuristic for each empty slot in the board */
 		for(let i = 0; i < emptySlots.length; i++) {
