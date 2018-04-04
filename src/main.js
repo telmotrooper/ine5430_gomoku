@@ -1,10 +1,11 @@
 $(document).ready(function() {
+	color = null;
 	$("#pick-color").modal("show");
 	
 	b = new Board(15);
 	let matrix = b.getMatrix();
 
-	/* Drawing board */
+	/* Drawing board from the matrix */
 	matrix.forEach(function(column, i) {
 		$("#board").append(`<tr id="row-${i}"></tr>`);
 		column.forEach(function(square, j) {
@@ -15,47 +16,43 @@ $(document).ready(function() {
 	/* Dealing with click event */
 	$("td").click(function(event) {
 		let position = String(event.target.id).split("-");
+		let x = position[1];
+		let y = position[2];
 
-		let element = $(this);
-		let lastPlayer = b.getLastColor();
-
-		if(!element.hasClass("white") && !element.hasClass("black")) {
-			console.log(`Player at ${position[1]},${position[2]}`);
-
-			if(lastPlayer == null || lastPlayer == "black") {	// If "white"
-				/* Drawing move and adding it to the board */
-				$(element).addClass("white");
-				b.setLastColor("white");
-				b.play("white", position[1], position[2]);
-			} else {	// If "black"
-				/* Drawing move and adding it to the board */
-				$(element).addClass("black");
-				b.setLastColor("black");
-				b.play("black", position[1], position[2]);
-			}
-			checkVictory(position[1], position[2]);
+		if(b.getValue(x,y) == 0) {
+			play(x, y);
 		}
-		// b.printMatrix();
 	});
 });
 
-function checkVictory(posX, posY) {
-	let lastPlayer = b.getLastColor();
-
-	if(b.checkVictory(posX, posY)) {
+function checkVictory(x, y) {
+	if(b.checkVictory(x, y)) {
 		$("#end-game-header").text("Fim de jogo!");
 		$("#end-game").modal("show");
 	};
 }
 
-function pickColor(color) {
+function pickColor(c) {
+	color = c;
 	$("#pick-color").modal("hide");
-	
-	if(color == "black") {
-		b.setPlayerColor("white");
-		b.setLastColor("white");
-	} else {
-		b.setPlayerColor("black");
-		b.setLastColor("black");
+}
+
+function switchColor() {
+	switch (color) {
+	case "black":
+		color = "white";
+		break;
+	case "white":
+		color = "black";
 	}
+}
+
+function play(x, y) {
+	b.play(color, x, y);
+	$(`#square-${x}-${y}`).addClass(color);
+
+	b.printMatrix();
+
+	switchColor();
+	checkVictory(x, y);
 }

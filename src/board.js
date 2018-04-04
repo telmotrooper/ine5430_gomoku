@@ -1,8 +1,8 @@
 class Board {
 	constructor(size) {
 		this.matrix = [];
-		this.lastPlayer = null;
 
+		/* Filling the matrix with zeroes */
 		for(let i = 0; i < size; i++) {
 			this.matrix[i] = new Array(size);
 			this.matrix[i].fill(0);
@@ -10,7 +10,7 @@ class Board {
 	}
 
 	printMatrix() {
-		// console.clear();
+		console.clear();
 		
 		this.matrix.forEach(function(row) {
 			let line = "";
@@ -27,40 +27,21 @@ class Board {
 		return this.matrix;
 	}
 
-	getLastColor() {
-		return this.lastPlayer;
-	}
-
-	setLastColor(color) {
-		this.lastPlayer = color;
-	}
-
-	switchLastColor() {
-		switch (this.lastPlayer) {
-		case "white":
-			this.lastPlayer = "black";
-			break;
-		case "black":
-			this.lastPlayer = "white";
-		}
-	}
-
-	setPlayerColor(color) {
-		this.playerColor = color;
-	}
-
-	getPlayerColor() {
-		return this.playerColor;
+	getValue(x, y) {
+		return this.matrix[x][y];
 	}
 
 	play(color, x, y) {
 		let colorValue = 0;
 
-		if(color == "black") {
+		switch (color) {
+		case "black":
 			colorValue = 1;
-		} else {	// color == "white"
+			break;
+		case "white":
 			colorValue = 2;
 		}
+		
 		this.matrix[x][y] = colorValue;
 	}
 
@@ -106,7 +87,7 @@ class Board {
 		return false;
 	}
 
-	countFive(color, array) {
+	countFive(color, array) {	// Used inside checkVictory()
 		let counter = 0;
 
 		for(let i = 0; i < array.length; i++) {
