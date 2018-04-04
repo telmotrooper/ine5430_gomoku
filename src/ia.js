@@ -91,7 +91,7 @@ class IA {
 		}
 
 		let horizontal = [];
-		for(let i = y - 4; i <= y + 4; i++) {
+		for(let i = y - 5; i <= y + 5; i++) {
 			if(i >= 0 && i <= 14) {
 				horizontal.push(matrix[x][i]);
 			}
@@ -99,7 +99,7 @@ class IA {
 		heuristicValue += this.countSequence(color, horizontal);
 
 		let vertical = [];
-		for(let i = x - 4; i <= x + 4; i++) {
+		for(let i = x - 5; i <= x + 5; i++) {
 			if(i >= 0 && i <= 14) {
 				vertical.push(matrix[i][y]);
 			}
@@ -107,7 +107,7 @@ class IA {
 		heuristicValue += this.countSequence(color, vertical);
 
 		let diagonalA = [];
-		for(let i = x - 4, j = y - 4; i <= x + 4; i++) {
+		for(let i = x - 5, j = y - 5; i <= x + 5; i++) {
 			if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
 				diagonalA.push(matrix[i][j]);
 			}
@@ -116,7 +116,7 @@ class IA {
 		heuristicValue += this.countSequence(color, diagonalA);
 
 		let diagonalB = [];
-		for(let i = x + 4, j = y - 4; i >= x - 4; i--) {
+		for(let i = x + 5, j = y - 5; i >= x - 5; i--) {
 			if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
 				diagonalB.push(matrix[i][j]);
 			}
