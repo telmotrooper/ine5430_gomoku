@@ -63,7 +63,7 @@ class Board {
 		}
 		
 		this.matrix[x][y] = colorValue;
-		this.lastMove = [x,y];
+		this.lastMove = [x,y,colorValue];
 	}
 
 	checkVictory(x, y) {
