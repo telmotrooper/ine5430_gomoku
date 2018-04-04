@@ -35,25 +35,50 @@ class IA {
 	}
 
 	heuristic(matrix, lastMove, moveAttempt, color) {
+		let heuristicValue = 0;
+
 		/* Play the piece in the matrix copy */
 		matrix[moveAttempt[0]][moveAttempt[1]] = color;
 		
 		let x = parseInt(moveAttempt[0]);
 		let y = parseInt(moveAttempt[1]);
-		
+
 		let horizontal = [];
 		for(let i = y - 4; i <= y + 4; i++) {
 			if(i >= 0 && i <= 14) {
 				horizontal.push(matrix[x][i]);
 			}
 		}
+		heuristicValue += this.countSequence(color, horizontal);
 
-		console.log(`Attempt at ${x},${y}`);
-		console.log("Horizontal: ");
-		console.log(horizontal);
-		console.log("Sequence: ");
-		this.countSequence(color, horizontal);
-		console.log("-----");
+		let vertical = [];
+		for(let i = x - 4; i <= x + 4; i++) {
+			if(i >= 0 && i <= 14) {
+				vertical.push(matrix[i][y]);
+			}
+		}
+		heuristicValue += this.countSequence(color, vertical);
+
+		let diagonalA = [];
+		for(let i = x - 4, j = y - 4; i <= x + 4; i++) {
+			if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
+				diagonalA.push(matrix[i][j]);
+			}
+			j += 1;
+		}
+		heuristicValue += this.countSequence(color, diagonalA);
+
+		let diagonalB = [];
+		for(let i = x + 4, j = y - 4; i >= x - 4; i--) {
+			if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
+				diagonalB.push(matrix[i][j]);
+			}
+			j += 1;
+		}
+		heuristicValue += this.countSequence(color, diagonalB);
+
+		console.log(`Attempt at ${x},${y} has value ${heuristicValue}`);
+		return heuristicValue;
 	}
 
 	getComputerColor(lastMove) {	// Finds out the color of the pieces controlled by the computer
@@ -92,8 +117,6 @@ class IA {
 				counter = 0;
 			}
 		}
-
-		// console.log(sequences);
 
 		if(sequences.length > 0) {
 			lineValue = sequences.reduce((a, b) => {return a + b;});
