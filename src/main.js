@@ -36,7 +36,11 @@ function checkVictory(x, y) {
 			$("#end-game-header").text("Você perdeu!");
 		}
 		$("#end-game").modal("show");
-	};
+
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function pickColor(c) {
@@ -66,9 +70,10 @@ function play(x, y) {
 
 	// b.printMatrix();
 	switchColor();
-	checkVictory(x, y);
-
-	computerPlay();
+	
+	if(!checkVictory(x, y)) {
+		computerPlay();
+	}
 }
 
 function computerPlay() {
