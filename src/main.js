@@ -69,7 +69,7 @@ function play(x, y) {
 	b.play(color, iaMove[0], iaMove[1]);
 	$(`#square-${iaMove[0]}-${iaMove[1]}`).addClass(color);
 
-	b.printMatrix();
+	// b.printMatrix();
 	switchColor();
 	checkVictory(iaMove[0], iaMove[1]);
 }
