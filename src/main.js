@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	color = null;
+	playerColor = null;
+
 	$("#pick-color").modal("show");
 	
 	b = new Board(15);
@@ -20,7 +22,7 @@ $(document).ready(function() {
 		let x = position[1];
 		let y = position[2];
 
-		if(b.getValue(x,y) == 0) {
+		if(b.getColor(x,y) == "blank") {
 			play(x, y);
 		}
 	});
@@ -28,13 +30,18 @@ $(document).ready(function() {
 
 function checkVictory(x, y) {
 	if(b.checkVictory(x, y)) {
-		$("#end-game-header").text("Fim de jogo!");
+		if(b.getColor(x,y) == playerColor) {
+			$("#end-game-header").text("Você venceu!");
+		} else {
+			$("#end-game-header").text("Você perdeu!");
+		}
 		$("#end-game").modal("show");
 	};
 }
 
 function pickColor(c) {
 	color = c;
+	playerColor = c;
 	$("#pick-color").modal("hide");
 }
 

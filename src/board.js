@@ -31,6 +31,17 @@ class Board {
 		return this.matrix[x][y];
 	}
 
+	getColor(x, y) {
+		switch (this.matrix[x][y]) {
+		case 0:
+			return "blank";
+		case 1:
+			return "black";
+		case 2:
+			return "white";
+		}
+	}
+
 	play(color, x, y) {
 		let colorValue = 0;
 
