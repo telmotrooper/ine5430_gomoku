@@ -4,7 +4,7 @@ class IA {
 	}
 
 	getBestMove(board) {
-		let matrix = board.getMatrixCopy();
+		let ownMatrix = board.getMatrixCopy();
 		let lastMove = board.getLastMove();
 
 		if(lastMove != null) {
@@ -14,29 +14,42 @@ class IA {
 		let emptySlots = [];
 
 		/* Finding all empty slots */
-		for(let x = 0; x < matrix.length; x++) {
-			for(let y = 0; y < matrix[x].length; y++) {
-				if(matrix[x][y] == 0) {
+		for(let x = 0; x < ownMatrix.length; x++) {
+			for(let y = 0; y < ownMatrix[x].length; y++) {
+				if(ownMatrix[x][y] == 0) {
 					emptySlots.push([x,y]);
 				}
 			}
 		}
 
-		this.heuristic(matrix, lastMove, board);
+		/* Calculate the heuristic for each empty slot in the board */
+		for(let i = 0; i < emptySlots.length; i++) {
+			let ownMatrix = board.getMatrixCopy();
+			this.heuristic(ownMatrix, lastMove, emptySlots[i]);
+		}
 
-		// console.log(emptySlots);
 		let bestMove = emptySlots[Math.floor(Math.random() * emptySlots.length)];
-
 		console.log(`Computer played at ${bestMove[0]},${bestMove[1]}`);	
-
 		return bestMove;
 	}
 
-	heuristic(matrix, lastMove) {
-		if(lastMove != null) {
-			/* This is the color of the IA pieces */ 
-			// console.log(matrix[lastMove[0]][lastMove[1]]);
+	heuristic(matrix, lastMove, moveAttempt) {
+		let color = null;
+
+		/* Finding out the color of the pieces controlled by the computer */
+		if(lastMove == null) {
+			color = 1;	// The first to play is always black (value: 1)
+		} else {
+			switch (matrix[lastMove[0]][lastMove[1]]) {
+			case 0:	// blank
+				console.log("THIS SHOULD NEVER HAPPEN!");
+				break;
+			case 1:	// player is black, computer is white
+				color = 2;
+				break;
+			case 2:	// player is white, computer is black
+				color = 1;
+			}
 		}
-		
 	}
 }
