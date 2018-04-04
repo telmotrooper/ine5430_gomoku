@@ -5,9 +5,7 @@ class IA {
 
 	getBestMove(board) {
 		let matrix = board.getMatrix();
-		// console.log("Matrix as seen by the IA:");
-		// console.log(matrix);
-
+		
 		let emptySlots = [];
 
 		/* Finding all empty slots */

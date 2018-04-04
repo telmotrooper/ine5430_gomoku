@@ -43,6 +43,11 @@ function pickColor(c) {
 	color = c;
 	playerColor = c;
 	$("#pick-color").modal("hide");
+
+	if(playerColor == "white") {
+		color = "black";
+		computerPlay();
+	}
 }
 
 function switchColor() {
@@ -56,15 +61,17 @@ function switchColor() {
 }
 
 function play(x, y) {
-	/* PLAYER TURN */
 	b.play(color, x, y);
 	$(`#square-${x}-${y}`).addClass(color);
 
-	b.printMatrix();
+	// b.printMatrix();
 	switchColor();
 	checkVictory(x, y);
 
-	/* COMPUTER TURN */
+	computerPlay();
+}
+
+function computerPlay() {
 	let iaMove = ia.getBestMove(b);
 	b.play(color, iaMove[0], iaMove[1]);
 	$(`#square-${iaMove[0]}-${iaMove[1]}`).addClass(color);
