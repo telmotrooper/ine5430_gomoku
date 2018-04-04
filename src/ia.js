@@ -4,8 +4,13 @@ class IA {
 	}
 
 	getBestMove(board) {
-		let matrix = board.getMatrix();
-		
+		let matrix = board.getMatrixCopy();
+		let lastMove = board.getLastMove();
+
+		if(lastMove != null) {
+			console.log("Player played at " + lastMove);
+		}
+
 		let emptySlots = [];
 
 		/* Finding all empty slots */
@@ -17,7 +22,21 @@ class IA {
 			}
 		}
 
+		this.heuristic(matrix, lastMove, board);
+
 		// console.log(emptySlots);
-		return emptySlots[Math.floor(Math.random() * emptySlots.length)];
+		let bestMove = emptySlots[Math.floor(Math.random() * emptySlots.length)];
+
+		console.log(`Computer played at ${bestMove[0]},${bestMove[1]}`);	
+
+		return bestMove;
+	}
+
+	heuristic(matrix, lastMove) {
+		if(lastMove != null) {
+			/* This is the color of the IA pieces */ 
+			// console.log(matrix[lastMove[0]][lastMove[1]]);
+		}
+		
 	}
 }

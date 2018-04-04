@@ -1,6 +1,7 @@
 class Board {
 	constructor(size) {
 		this.matrix = [];
+		this.lastMove = null;
 
 		/* Filling the matrix with zeroes */
 		for(let i = 0; i < size; i++) {
@@ -27,6 +28,10 @@ class Board {
 		return this.matrix;
 	}
 
+	getMatrixCopy() {
+		return JSON.parse(JSON.stringify(this.matrix));
+	}
+
 	getValue(x, y) {
 		return this.matrix[x][y];
 	}
@@ -42,6 +47,10 @@ class Board {
 		}
 	}
 
+	getLastMove() {
+		return this.lastMove;
+	}
+
 	play(color, x, y) {
 		let colorValue = 0;
 
@@ -54,6 +63,7 @@ class Board {
 		}
 		
 		this.matrix[x][y] = colorValue;
+		this.lastMove = [x,y];
 	}
 
 	checkVictory(x, y) {
