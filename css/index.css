@@ -15,6 +15,10 @@ table {
 	background-image: url("../img/board-tile.png");
 }
 
+#square-7-7 {
+	background-image: url("../img/center-tile.png");
+}
+
 td {
 	text-align: center;
 	font-size: 0;
@@ -26,11 +30,11 @@ td {
 }
 
 .black {
-	background-image: url("../img/black-piece.png");
+	background-image: url("../img/black-piece.png") !important;
 }
 
 .white {
-	background-image: url("../img/white-piece.png");
+	background-image: url("../img/white-piece.png") !important;
 }
 
 .margin-auto {
