@@ -8,8 +8,6 @@ class IA {
 		let lastMove = board.getLastMove();
 		let computerColor = this.getComputerColor(lastMove);
 
-		console.log(computerColor);
-
 		if(lastMove != null) {
 			console.log(`Player played at ${lastMove[0]},${lastMove[1]}`);
 		}
@@ -40,7 +38,22 @@ class IA {
 		/* Play the piece in the matrix copy */
 		matrix[moveAttempt[0]][moveAttempt[1]] = color;
 		
-		// TODO
+		let x = parseInt(moveAttempt[0]);
+		let y = parseInt(moveAttempt[1]);
+		
+		let horizontal = [];
+		for(let i = y - 4; i <= y + 4; i++) {
+			if(i >= 0 && i <= 14) {
+				horizontal.push(matrix[x][i]);
+			}
+		}
+
+		console.log(`Attempt at ${x},${y}`);
+		console.log("Horizontal: ");
+		console.log(horizontal);
+		console.log("Sequence: ");
+		this.countSequence(color, horizontal);
+		console.log("-----");
 	}
 
 	getComputerColor(lastMove) {	// Finds out the color of the pieces controlled by the computer
@@ -62,5 +75,36 @@ class IA {
 		}
 
 		return color;
+	}
+
+	countSequence(color, array) {	// Used inside checkVictory()
+		let sequences = [];
+		let lineValue = 0;
+		let counter = 0;
+
+		for(let i = 0; i < array.length; i++) {
+			if(array[i] == color) {
+				counter += 1;
+			} else {
+				if(counter > 0) {
+					sequences.push(counter);
+				}
+				counter = 0;
+			}
+		}
+
+		// console.log(sequences);
+
+		if(sequences.length > 0) {
+			lineValue = sequences.reduce((a, b) => {return a + b;});
+
+			/* Decrementing the sequence value for every
+			   break between sequences including being blocked */
+			for(let i = 0; i < sequences.length - 1; i++) {
+				lineValue *= 0.75;
+			}
+		}
+
+		return lineValue;
 	}
 }
