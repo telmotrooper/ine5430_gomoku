@@ -32,6 +32,7 @@ class IA {
 			playerHeuristic = 0;
 		}
 		
+		let possibleMoves = [];
 
 		/* Calculate the heuristic for each empty slot in the board */
 		for(let i = 0; i < emptySlots.length; i++) {
@@ -40,11 +41,36 @@ class IA {
 			let totalHeuristic = computerHeuristic - playerHeuristic;
 
 			console.log(`Attempt at ${emptySlots[i][0]},${emptySlots[i][1]} has value ${totalHeuristic}`);
+			possibleMoves.push({
+				x: emptySlots[i][0],
+				y: emptySlots[i][1],
+				val: totalHeuristic
+			});
 		}
 
-		let bestMove = emptySlots[Math.floor(Math.random() * emptySlots.length)];
-		console.log(`Computer played at ${bestMove[0]},${bestMove[1]}`);	
-		return bestMove;
+		let bestMove = possibleMoves.reduce(function(a,b) {
+			let max = Math.max(a.val, b.val);
+			
+			if(a.val == max) {
+				return a;
+			} else {
+				return b;
+			}
+		});
+
+		let bestPossibleMoves = [];
+
+		for(let i = 0; i < possibleMoves.length; i++) {
+			if(possibleMoves[i].val == bestMove.val) {
+				bestPossibleMoves.push(possibleMoves[i]);
+			}
+		}
+
+		let randomBestPossibleMove = bestPossibleMoves[Math.floor(Math.random() * bestPossibleMoves.length)];
+
+		// let bestMove = emptySlots[Math.floor(Math.random() * emptySlots.length)];
+		console.log(`Computer played at ${randomBestPossibleMove.x},${randomBestPossibleMove.y} with value ${randomBestPossibleMove.val}`);	
+		return [randomBestPossibleMove.x,randomBestPossibleMove.y];
 	}
 
 	heuristic(matrix, lastMove, moveAttempt, color) {
@@ -135,7 +161,17 @@ class IA {
 				counter += 1;
 			} else {
 				if(counter > 0) {
-					sequences.push(counter);
+					if(counter == 5) {
+						sequences.push(300 * 150 * 75 * 50);
+					} else if(counter == 4) {
+						sequences.push(300 * 150 * 75);
+					} else if(counter == 3) {
+						sequences.push(300 * 150);
+					} else if(counter == 2) {
+						sequences.push(300);
+					} else {
+						sequences.push(counter);
+					}
 				}
 				counter = 0;
 			}
