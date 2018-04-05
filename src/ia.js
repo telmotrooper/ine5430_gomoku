@@ -29,57 +29,311 @@ class IA {
 
 		for(let x = 0; x < matrix.length; x++) {
 			for(let y = 0; y < matrix[x].length; y++) {
-				if(matrix[x][y] == 0) {
+				if( this.itsGoodToPlay(matrix, x, y) ) {
 					emptySlots.push([x,y]);
 				}
 			}
+		}
+		if( emptySlots.length == 0 ){
+			emptySlots.push([7,7]);
 		}
 
 		return emptySlots;
 	}
 
-	heuristic(matrix, color) {
-		let heuristicValue = 0;
-
-		for(let y = 0; y < matrix.length; y++) {
-			for(let x = 0; x < matrix[y].length; x++) {
-				let horizontal = [];
-				for(let i = y - 5; i <= y + 5; i++) {
-					if(i >= 0 && i <= 14) {
-						horizontal.push(matrix[x][i]);
-					}
-				}
-				heuristicValue += this.countSequence(color, horizontal);
-		
-				let vertical = [];
-				for(let i = x - 5; i <= x + 5; i++) {
-					if(i >= 0 && i <= 14) {
-						vertical.push(matrix[i][y]);
-					}
-				}
-				heuristicValue += this.countSequence(color, vertical);
-		
-				let diagonalA = [];
-				for(let i = x - 5, j = y - 5; i <= x + 5; i++) {
-					if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
-						diagonalA.push(matrix[i][j]);
-					}
-					j += 1;
-				}
-				heuristicValue += this.countSequence(color, diagonalA);
-		
-				let diagonalB = [];
-				for(let i = x + 5, j = y - 5; i >= x - 5; i--) {
-					if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
-						diagonalB.push(matrix[i][j]);
-					}
-					j += 1;
-				}
-				heuristicValue += this.countSequence(color, diagonalB);
-			}
+	itsGoodToPlay( matrix, x, y ){
+		if( matrix[x][y] != 0 ){
+			return false;
 		}
 
-		return heuristicValue;
+		if( ( x + 1 < 15 && matrix[x + 1][y] != 0 )|| 
+			( x - 1 > 0 && matrix[x - 1][y] != 0 )||
+			( y + 1 < 15 && matrix[x][y + 1] != 0 )||
+			( y - 1 > 0 && matrix[x][y - 1] != 0 )||
+			( x + 1 < 15 && y + 1 < 15 && matrix[x + 1][y + 1] != 0 )||
+			( x - 1 > 0 && y + 1 < 15 && matrix[x - 1][y + 1] != 0 )||
+			( x + 1 < 15 && y - 1 > 0 && matrix[x + 1][y - 1] != 0 )||
+			( x - 1 > 0 && y - 1 > 0 && matrix[x - 1][y - 1] != 0 ) ){
+			return true;
+		}
+		return false;
+	}
+
+	// heuristic(matrix, color) {
+	// 	let heuristicValue = 0;
+
+	// 	for(let y = 0; y < matrix.length; y++) {
+	// 		for(let x = 0; x < matrix[y].length; x++) {
+	// 			let horizontal = [];
+	// 			for(let i = y - 5; i <= y + 5; i++) {
+	// 				if(i >= 0 && i <= 14) {
+	// 					horizontal.push(matrix[x][i]);
+	// 				}
+	// 			}
+	// 			heuristicValue += this.countSequence(color, horizontal);
+		
+	// 			let vertical = [];
+	// 			for(let i = x - 5; i <= x + 5; i++) {
+	// 				if(i >= 0 && i <= 14) {
+	// 					vertical.push(matrix[i][y]);
+	// 				}
+	// 			}
+	// 			heuristicValue += this.countSequence(color, vertical);
+		
+	// 			let diagonalA = [];
+	// 			for(let i = x - 5, j = y - 5; i <= x + 5; i++) {
+	// 				if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
+	// 					diagonalA.push(matrix[i][j]);
+	// 				}
+	// 				j += 1;
+	// 			}
+	// 			heuristicValue += this.countSequence(color, diagonalA);
+		
+	// 			let diagonalB = [];
+	// 			for(let i = x + 5, j = y - 5; i >= x - 5; i--) {
+	// 				if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
+	// 					diagonalB.push(matrix[i][j]);
+	// 				}
+	// 				j += 1;
+	// 			}
+	// 			heuristicValue += this.countSequence(color, diagonalB);
+	// 		}
+	// 	}
+
+	// 	return heuristicValue;
+	// }
+
+	testHeristic(){
+		let matrix = [
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
+		];
+
+		console.log( matrix );
+		console.log( "Possible Plays" );
+		console.log( this.getEmptySlots(matrix) );
+
+		console.log( "HEURISTIC" );
+		console.log( this.heuristic(matrix, 1) );
+	}
+
+	heuristic( matrix, iaColor ){
+		let hValue = 0;
+
+		// // HORIZONTAL; TODO Vertical -- so criar as variaveis e trocar x por y ao percorrer a matriz
+		// for(let x = 0; x < matrix.length; x++) {
+		// 	let xCount = 0;
+		// 	let xLength = 0;
+		// 	let xSpace = 0;
+		// 	let xColor = 0;
+		// 	let xBlocked = 0;
+		// 	let xSpaceAfter = 0;
+		// 	for(let y = 0; y < matrix[x].length; y++) {
+		// 		if( xLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
+		// 			break;
+		// 		}
+		// 		if( matrix[x][y] == 0 ){
+		// 			if( xLength == 0){ // nenhuma tupla
+		// 				continue;
+		// 			}else{  // tupla com espaços;
+		// 				xCount++;
+		// 				xSpace++;
+		// 				xSpaceAfter++;
+		// 			}
+		// 		}else{
+		// 			if( xLength == 0 ){ // nova tupla
+		// 				xCount = 1;
+		// 				xLength = 1;
+		// 				xColor = matrix[x][y];
+		// 			}else{ // atualizar tupla
+		// 				if( matrix[x][y] == xColor ){ // aumenta o length
+		// 					xCount++;
+		// 					xLength++;
+		// 					xSpaceAfter = 0;
+		// 					if( x < 5 ){
+		// 						xBlocked = 1;
+		// 					}
+		// 				}else{ // blockeia // comeca nova
+		// 					if( xBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
+		// 										 // nao seram adicionadas tuplas blockeadas dos dois lados
+		// 						xBlocked = 1;
+		// 						hValue += this.getTupleValue( xLength, xSpace - xSpaceAfter, xBlocked, xColor, iaColor);
+		// 					}
+		// 					xCount = 1;
+		// 					xLength = 1;
+		// 					xBlocked = 1;
+		// 					xSpace = 0;
+		// 					xColor = matrix[x][y];
+		// 					xSpaceAfter = 0;
+		// 				}
+		// 			}
+		// 		}
+		// 		if( xCount == 5 ){ //adiciona valor de tupla
+		// 			hValue += this.getTupleValue( xLength, xSpace - xSpaceAfter, xBlocked, xColor, iaColor );
+		// 			xCount = 0;
+		// 			xLength = 0;
+		// 			xColor = 0;
+		// 			xBlocked = 0;
+		// 			xSpace = 0;
+		// 			xSpaceAfter = 0;
+		// 		}
+		// 	}
+		// }
+		// \ diagonal parte de cima da matriz
+		let coluna = 0;
+		let counter = 0;
+		for( let linha = 0; linha < 10; linha++ ){
+			let dCount = 0;
+			let dLength = 0;
+			let dSpace = 0;
+			let dColor = 0;
+			let dBlocked = 0;
+			let dSpaceAfter = 0;
+			for( let i = 0; i < matrix.length; i++ ){
+				let x = coluna + i;
+				let y = linha + i; 
+				if( x > 14 || y > 14 ){
+					break; // supostamente e para parar apenas o 2 loop
+				}
+
+				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
+				// 	break;
+				// }
+				if( matrix[x][y] == 0 ){
+					if( dLength == 0){ // nenhuma tupla
+						continue;
+					}else{  // tupla com espaços;
+						dCount++;
+						dSpace++;
+						dSpaceAfter++;
+					}
+				}else{
+					if( dLength == 0 ){ // nova tupla
+						dCount = 1;
+						dLength = 1;
+						dColor = matrix[x][y];
+					}else{ // atualizar tupla
+						if( matrix[x][y] == dColor ){ // aumenta o length
+							dCount++;
+							dLength++;
+							dSpaceAfter = 0;
+							// if( x < 5 ){
+							// 	dBlocked = 1;
+							// }
+						}else{ // blockeia // comeca nova
+							if( dBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
+												 // nao seram adicionadas tuplas blockeadas dos dois lados
+								dBlocked = 1;
+								hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor);
+							}
+							dCount = 1;
+							dLength = 1;
+							dBlocked = 1;
+							dSpace = 0;
+							dColor = matrix[x][y];
+							dSpaceAfter = 0;
+						}
+					}
+				}
+				if( dCount == 5 ){ //adiciona valor de tupla
+					hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor );
+					dCount = 0;
+					dLength = 0;
+					dColor = 0;
+					dBlocked = 0;
+					dSpace = 0;
+					dSpaceAfter = 0;
+				}
+				if( matrix[coluna + i ][ linha + i] == 1){
+					counter++;
+				}
+			}
+			if( dLength > 0 ){
+				hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor );
+			}
+			console.log( "dLength" );
+			console.log( dLength );
+		}
+		// let linha = 0;
+		// for( coluna = 1; coluna < 10; coluna++ ){
+		// 	for( let i = 0; i < matrix.length; i++ ){
+		// 		if( linha + i > 14 || coluna + i > 14 ){
+		// 			break; // supostamente e para parar apenas o 2 loop
+		// 		}
+				// if( matrix[coluna + i ][ linha + i] == 1){
+				// 	counter++;
+				// }
+		// 	}
+		// }
+		
+
+		console.log( "counter" );
+		console.log( counter );
+		// }
+		// for( let coluna = 0; coluna < 10; coluna ++ ){
+
+		// }
+
+		// for(let x = 0; x < matrix.length; x++) {
+		// 	for(let y = 0; y < matrix[x].length; y++) {
+
+		// 	}
+		// }
+
+		return hValue;
+	}
+
+	getTupleValue(length, spaces, blocked, color, iaColor){
+		let value = 0;
+		if( color == iaColor ){
+			if( length > 1 ){
+				value += this.amp( length ) * this.mod( spaces, blocked );
+			}else{
+				value++;
+			}
+		}else{
+			if( length > 1 ){
+				value -= this.amp( length ) * this.mod( spaces, blocked );
+			}else{
+				value--;
+			}
+		}
+		return value;
+	}
+
+	amp( length ){
+		let value = 0;
+		switch (length){
+			case 2:
+				value =	50;
+			break;
+			case 3:
+				value =	100;
+			break;
+			case 4:
+				value =	200;
+			break;
+			case 5:
+				value =	500;
+		}
+		return value;
+	}
+
+	mod( spaces, blocked ){
+		return 10 - spaces - (blocked * 5);
 	}
 
 	getComputerColor(lastMove) {	// Finds out the color of the pieces controlled by the computer
