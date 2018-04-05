@@ -12,8 +12,6 @@ class IA {
 		let lastMove = board.getLastMove();
 		let computerColor = this.getComputerColor(lastMove);
 
-		console.log(`lastMove: ${lastMove}`);
-
 		if(lastMove != null) {
 			console.log(`Player played at ${lastMove[0]},${lastMove[1]}`);
 		}
@@ -237,7 +235,6 @@ class IA {
 
 				let childNode = {
 					matrix: nodeMatrix,
-					lastMove: children[i],
 					moveAttempt: children[i],
 					color: this.getInverseColor(node.color)
 				};
@@ -260,7 +257,6 @@ class IA {
 
 				let childNode = {
 					matrix: nodeMatrix,
-					lastMove: children[i],
 					moveAttempt: children[i],
 					color: this.getInverseColor(node.color)
 				};
