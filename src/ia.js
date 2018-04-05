@@ -4,73 +4,7 @@ class IA {
 	}
 
 	getBestMove(board) {
-		let ownMatrix = board.getMatrixCopy();
-		let lastMove = board.getLastMove();
-		let computerColor = this.getComputerColor(lastMove);
-
-		if(lastMove != null) {
-			console.log(`Player played at ${lastMove[0]},${lastMove[1]}`);
-		}
-
-		let emptySlots = [];
-
-		/* Finding all empty slots */
-		for(let x = 0; x < ownMatrix.length; x++) {
-			for(let y = 0; y < ownMatrix[x].length; y++) {
-				if(ownMatrix[x][y] == 0) {
-					emptySlots.push([x,y]);
-				}
-			}
-		}
-
-		let playerHeuristic = null;
-
-		if(lastMove != null) {
-			/* Calculate the heuristic for the board as it is */
-			playerHeuristic = this.heuristic(ownMatrix, lastMove, null, lastMove[2]);
-		} else {	// If the board is empty
-			playerHeuristic = 0;
-		}
-		
-		let possibleMoves = [];
-
-		/* Calculate the heuristic for each empty slot in the board */
-		for(let i = 0; i < emptySlots.length; i++) {
-			let ownMatrix = board.getMatrixCopy();
-			let computerHeuristic = this.heuristic(ownMatrix, lastMove, emptySlots[i], computerColor);
-			let totalHeuristic = computerHeuristic - playerHeuristic;
-
-			console.log(`Attempt at ${emptySlots[i][0]},${emptySlots[i][1]} has value ${totalHeuristic}`);
-			possibleMoves.push({
-				x: emptySlots[i][0],
-				y: emptySlots[i][1],
-				val: totalHeuristic
-			});
-		}
-
-		let bestMove = possibleMoves.reduce(function(a,b) {
-			let max = Math.max(a.val, b.val);
-			
-			if(a.val == max) {
-				return a;
-			} else {
-				return b;
-			}
-		});
-
-		let bestPossibleMoves = [];
-
-		for(let i = 0; i < possibleMoves.length; i++) {
-			if(possibleMoves[i].val == bestMove.val) {
-				bestPossibleMoves.push(possibleMoves[i]);
-			}
-		}
-
-		let randomBestPossibleMove = bestPossibleMoves[Math.floor(Math.random() * bestPossibleMoves.length)];
-
-		// let bestMove = emptySlots[Math.floor(Math.random() * emptySlots.length)];
-		console.log(`Computer played at ${randomBestPossibleMove.x},${randomBestPossibleMove.y} with value ${randomBestPossibleMove.val}`);	
-		return [randomBestPossibleMove.x,randomBestPossibleMove.y];
+		return this.minimax( board);
 	}
 
 	heuristic(matrix, lastMove, moveAttempt, color) {
@@ -189,4 +123,120 @@ class IA {
 
 		return lineValue;
 	}
+
+	minimax(board) {	// Recursive through the usage of getMini() and getMax()
+
+		let matrix = board.getMatrixCopy();
+		let lastMove = board.getLastMove();
+		let computerColor = this.getComputerColor(lastMove);
+
+		let alpha = Number.MIN_SAFE_INTEGER;
+		let beta = Number.MAX_SAFE_INTEGER;
+		let bestValue = Number.MIN_SAFE_INTEGER;
+		
+		let bestPlay = [];
+
+		let possiblePlays = this.getPossiblePlays(matrix);
+
+		for(let i = 0; i < possiblePlays.length; i++) {
+			let play = possiblePlays[i];
+			matrix[play[0]][play[1]] = 2; // 1 -- cor da IA
+			let value = this.getMax(matrix, alpha, beta, 0, lastMove, play);
+			matrix[play[0]][play[1]] = 0;
+
+			if( bestValue < value ){
+				bestValue = value;
+				bestPlay = play;
+			}
+			
+			if(alpha < value) {
+				alpha = value;
+			}
+		}
+		console.log("bestPlay");
+		console.log(bestPlay);
+
+		return bestPlay;
+	}
+
+	getMini(matrix, alpha, beta, depth, lastMove, moveAttempt) {
+		// if(node.isFinal())
+		// 	return this.utility(node, depth);
+
+		if(depth == 2)
+			return this.heuristic(node, depth, lastMove, moveAttempt, 1);// 1 -- cor da Jogador
+
+		let possiblePlays = this.getPossiblePlays(matrix);
+
+		let miniVal = Number.MAX_SAFE_INTEGER;;
+
+		for(let i = 0; i < possiblePlays.length; i++) {
+			let play = possiblePlays[i];
+			matrix[play[0]][play[1]] = 2;// 1 -- cor da IA
+			let value = this.getMax(matrix, alpha, beta, depth + 1, lastMove, play);
+			matrix[play[0]][play[1]] = 0;
+
+			if(alpha < miniVal)
+				alpha = miniVal;
+			if(value < miniVal)
+				miniVal = value;
+			if(alpha < beta)
+				break;
+		}
+		return miniVal;
+	}
+
+	getMax(matrix, alpha, beta, depth, lastMove, moveAttempt) {
+		// if(node.isFinal())
+		// 	return this.utility(node, depth);
+
+		if(depth == 2)
+			return this.heuristic(matrix, lastMove, moveAttempt, 2);// 1 -- cor da IA
+
+		let maxVal = Number.MIN_SAFE_INTEGER;
+
+		let possiblePlays = this.getPossiblePlays(matrix);
+		
+		for(let i = 0; i < possiblePlays.length; i++) {
+			let play = possiblePlays[i];
+			matrix[play[0]][play[1]] = 1;// 1 -- cor da Jogador
+			let value = this.getMini(matrix, alpha, beta, depth + 1, lastMove, play);
+			matrix[play[0]][play[1]] = 0;
+
+			if(beta > value)
+				beta = value;
+			if(value > maxVal)
+				maxVal = value;
+			if(alpha < beta) {
+				break;
+			}
+		}
+
+		return maxVal;
+	}
+
+	getPossiblePlays( matrix )
+	{
+		let emptySlots = [];
+		for(let x = 0; x < matrix.length; x++) {
+			for(let y = 0; y < matrix[x].length; y++) {
+				if(matrix[x][y] == 1) {	
+					if( x + 1 < matrix.length && matrix[x+1][y] == 0 ){
+						emptySlots.push([x + 1,y]);
+					}
+					if( x - 1 > 0 && matrix[x+1][y] == 0 ){
+						emptySlots.push([x - 1,y]);
+					}
+					if( y + 1 < matrix[x].length && matrix[x][y - 1] == 0 ){
+						emptySlots.push([x ,y + 1]);
+					}
+					if( x - 1 > 0 && matrix[x+1][y] == 0 ){
+						emptySlots.push([x,y - 1]);
+					}
+				}
+			}
+		}
+		return emptySlots;
+	}
+
 }
