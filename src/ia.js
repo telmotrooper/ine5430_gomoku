@@ -20,16 +20,10 @@ class IA {
 
 	getBestMove(board) {
 		let ownMatrix = board.getMatrixCopy();
-		let lastMove = board.getLastMove();
-		let computerColor = this.getComputerColor(lastMove);
-
-		if(lastMove != null) {
-			console.log(`Player played at ${lastMove[0]},${lastMove[1]}`);
-		}
 
 		let emptySlots = this.getEmptySlots(ownMatrix);
 		
-		let playerHeuristic = this.heuristic(ownMatrix, this.getInverseColor(computerColor));
+		let playerHeuristic = this.heuristic(ownMatrix, this.getInverseColor(this.computerColor));
 		
 		let possibleMoves = [];
 
@@ -39,10 +33,10 @@ class IA {
 			let y = emptySlots[i][1];
 
 			let ownMatrix = board.getMatrixCopy();
-			ownMatrix[x][y] = computerColor;
+			ownMatrix[x][y] = this.computerColor;
 
 
-			let computerHeuristic = this.heuristic(ownMatrix, computerColor);
+			let computerHeuristic = this.heuristic(ownMatrix, this.computerColor);
 			let totalHeuristic = computerHeuristic - playerHeuristic;
 
 			console.log(`Attempt at ${emptySlots[i][0]},${emptySlots[i][1]} has value ${totalHeuristic}`);
