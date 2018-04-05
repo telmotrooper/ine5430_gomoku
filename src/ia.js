@@ -24,7 +24,7 @@ class IA {
 		// let playerHeuristic = this.heuristic(node, this.playerColor);
 
 		let bestMove = this.minimax(node, this.depth, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, true);
-		console.log("Best move: " + bestMove);
+		return bestMove;
 
 		// let possibleMoves = [];
 		//
@@ -210,8 +210,40 @@ class IA {
 		return lineValue;
 	}
 
+	minimax(node, depth, alpha, beta, maximizing)
+	{
+		console.log("minimax");
+		let v = Number.MIN_SAFE_INTEGER;
+		let children = this.getEmptySlots(node);
+		let bestPlay = [];
+		let bestValue = Number.MIN_SAFE_INTEGER;
+
+		for(let i = 0; i < children.length; i++) {
+			let myNode = this.copyMatrix(node);
+
+			let x = children[i][0];
+			let y = children[i][1];
+
+			myNode[x][y] = this.computerColor;
+
+			v = this.minimaxNext(myNode, depth - 1, alpha, beta, false);
+			if(bestValue < v) {
+				bestPlay = [];
+				bestValue = v;
+				bestPlay.push(x);
+				bestPlay.push(y);
+			}
+
+			alpha = Math.max(alpha, v);
+
+			if(beta <= alpha) {
+				break;
+			}
+		}
+		return bestPlay;
+	}
 	/* Based on pseudocode from: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning#Pseudocode */
-	minimax(node, depth, alpha, beta, maximizing) {
+	minimaxNext(node, depth, alpha, beta, maximizing) {
 		// console.log("Time to minimax!");
 		
 		if(depth == 0) {
@@ -234,7 +266,7 @@ class IA {
 
 				myNode[x][y] = this.computerColor;
 
-				v = Math.max(v, this.minimax(myNode, depth - 1, alpha, beta, false));
+				v = Math.max(v, this.minimaxNext(myNode, depth - 1, alpha, beta, false));
 				alpha = Math.max(alpha, v);
 
 				if(beta <= alpha) {
@@ -255,7 +287,7 @@ class IA {
 
 				myNode[x][y] = this.playerColor;
 
-				v = Math.min(v, this.minimax(myNode, depth - 1, alpha, beta, true));
+				v = Math.min(v, this.minimaxNext(myNode, depth - 1, alpha, beta, true));
 				beta = Math.min(beta, v);
 
 				if(beta <= alpha) {
