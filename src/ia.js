@@ -1,6 +1,10 @@
 class IA {
 	constructor(depth) {
-		this.depth = depth;
+		if(depth > 0) {
+			this.depth = depth;
+		} else {
+			console.log("Error: Depth has to be greater than 0.");
+		}
 	}
 
 	getBestMove(board) {
@@ -8,26 +12,19 @@ class IA {
 		let lastMove = board.getLastMove();
 		let computerColor = this.getComputerColor(lastMove);
 
+		console.log(`lastMove: ${lastMove}`);
+
 		if(lastMove != null) {
 			console.log(`Player played at ${lastMove[0]},${lastMove[1]}`);
 		}
 
-		let emptySlots = [];
-
-		/* Finding all empty slots */
-		for(let x = 0; x < ownMatrix.length; x++) {
-			for(let y = 0; y < ownMatrix[x].length; y++) {
-				if(ownMatrix[x][y] == 0) {
-					emptySlots.push([x,y]);
-				}
-			}
-		}
-
+		let emptySlots = this.getEmptySlots(ownMatrix);
+		
 		let playerHeuristic = null;
 
 		if(lastMove != null) {
 			/* Calculate the heuristic for the board as it is */
-			playerHeuristic = this.heuristic(ownMatrix, lastMove, null, lastMove[2]);
+			playerHeuristic = this.heuristic(ownMatrix, lastMove, lastMove[2]);
 		} else {	// If the board is empty
 			playerHeuristic = 0;
 		}
@@ -37,7 +34,7 @@ class IA {
 		/* Calculate the heuristic for each empty slot in the board */
 		for(let i = 0; i < emptySlots.length; i++) {
 			let ownMatrix = board.getMatrixCopy();
-			let computerHeuristic = this.heuristic(ownMatrix, lastMove, emptySlots[i], computerColor);
+			let computerHeuristic = this.heuristic(ownMatrix, emptySlots[i], computerColor);
 			let totalHeuristic = computerHeuristic - playerHeuristic;
 
 			console.log(`Attempt at ${emptySlots[i][0]},${emptySlots[i][1]} has value ${totalHeuristic}`);
@@ -68,26 +65,42 @@ class IA {
 
 		let randomBestPossibleMove = bestPossibleMoves[Math.floor(Math.random() * bestPossibleMoves.length)];
 
-		// let bestMove = emptySlots[Math.floor(Math.random() * emptySlots.length)];
 		console.log(`Computer played at ${randomBestPossibleMove.x},${randomBestPossibleMove.y} with value ${randomBestPossibleMove.val}`);	
 		return [randomBestPossibleMove.x,randomBestPossibleMove.y];
+
+		// let node = {
+		// 	matrix: ownMatrix,
+		// 	lastMove: lastMove,
+		// 	moveAttempt: null,
+		// 	color: computerColor
+		// };
+
+		// this.minimax(node, this.depth, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, true);
+
+		// TODO
 	}
 
-	heuristic(matrix, lastMove, moveAttempt, color) {
+	getEmptySlots(matrix) {
+		let emptySlots = [];
+
+		for(let x = 0; x < matrix.length; x++) {
+			for(let y = 0; y < matrix[x].length; y++) {
+				if(matrix[x][y] == 0) {
+					emptySlots.push([x,y]);
+				}
+			}
+		}
+
+		return emptySlots;
+	}
+
+	heuristic(matrix, moveAttempt, color) {
 		let heuristicValue = 0;
-		let x = null;
-		let y = null;
+		let x = parseInt(moveAttempt[0]);
+		let y = parseInt(moveAttempt[1]);
 
-
-		if(moveAttempt != null) {	// If trying to calculate a move attempt
-			/* Play the piece in the matrix copy */
-			matrix[moveAttempt[0]][moveAttempt[1]] = color;
-
-			x = parseInt(moveAttempt[0]);
-			y = parseInt(moveAttempt[1]);
-		} else {	// If calculating the board without a new move
-			x = parseInt(lastMove[0]);
-			y = parseInt(lastMove[1]);
+		if(matrix[x][y] == "0") {	// If there's no piece in the square, put a piece there. Otherwise,
+			matrix[x][y] = color;	// the function will calculate the heuristic without making a move.
 		}
 
 		let horizontal = [];
@@ -151,6 +164,19 @@ class IA {
 		return color;
 	}
 
+	getInverseColor(color) {
+		switch (color) {
+		case 1:
+			return 2;
+		case 2:
+			return 1;
+		}
+	}
+
+	copyMatrix(matrix) {
+		return JSON.parse(JSON.stringify(matrix));
+	}
+
 	countSequence(color, array) {	// Used inside checkVictory()
 		let sequences = [];
 		let lineValue = 0;
@@ -189,4 +215,67 @@ class IA {
 
 		return lineValue;
 	}
+
+	/* Based on pseudocode from: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning#Pseudocode */
+	// minimax(node, depth, alpha, beta, maximizing) {
+	minimax(node, depth, alpha, beta, maximizing) {
+		console.log(`I'm minimaxing with depth ${depth} and lastMove: ${node.lastMove}!`);
+		if(depth == 0) {
+			let computerHeuristic = this.heuristic(node.matrix, node.lastMove, node.moveAttempt, node.color);
+			let playerHeuristic = this.heuristic(node.matrix, node.moveAttempt, node.moveAttempt, node.color);
+			let totalHeuristic = computerHeuristic - playerHeuristic;
+
+			return totalHeuristic;
+		}
+
+		if(maximizing) {
+			let v = Number.MIN_SAFE_INTEGER;
+			let children = this.getEmptySlots(node.matrix);
+
+			for(let i = 0; i < children.length; i++) {
+				let nodeMatrix = this.copyMatrix(node.matrix);
+
+				let childNode = {
+					matrix: nodeMatrix,
+					lastMove: children[i],
+					moveAttempt: children[i],
+					color: this.getInverseColor(node.color)
+				};
+
+				v = Math.max(v, this.minimax(childNode, depth - 1, alpha, beta, false));
+				alpha = Math.max(alpha, v);
+
+				if(beta <= alpha) {
+					break;
+				}
+			}
+			return v;
+
+		} else {	// minimizing
+			let v = Number.MAX_SAFE_INTEGER;
+			let children = this.getEmptySlots(node.matrix);
+			
+			for(let i = 0; i < children.length; i++) {
+				let nodeMatrix = this.copyMatrix(node.matrix);
+
+				let childNode = {
+					matrix: nodeMatrix,
+					lastMove: children[i],
+					moveAttempt: children[i],
+					color: this.getInverseColor(node.color)
+				};
+
+				v = Math.min(v, this.minimax(childNode, depth - 1, alpha, beta, true));
+				beta = Math.min(beta, v);
+
+				if(beta <= alpha) {
+					break;
+				}
+			}
+			return v;
+		}
+	}
+
 }
+
+	
