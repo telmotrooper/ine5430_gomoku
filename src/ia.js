@@ -23,7 +23,8 @@ class IA {
 		// let emptySlots = this.getEmptySlots(node);
 		// let playerHeuristic = this.heuristic(node, this.playerColor);
 
-		this.minimax(node, this.depth, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, true);
+		let bestMove = this.minimax(node, this.depth, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, true);
+		console.log("Best move: " + bestMove);
 
 		// let possibleMoves = [];
 		//
@@ -210,16 +211,14 @@ class IA {
 	}
 
 	/* Based on pseudocode from: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning#Pseudocode */
-	// minimax(node, depth, alpha, beta, maximizing) {
 	minimax(node, depth, alpha, beta, maximizing) {
-		console.log("Time to minimax!");
+		// console.log("Time to minimax!");
 		
 		if(depth == 0) {
 			let computerHeuristic = this.heuristic(node, this.computerColor);
 			let playerHeuristic = this.heuristic(node, this.playerColor);
 			let totalHeuristic = computerHeuristic - playerHeuristic;
 
-			// console.log("Heuristic: " + totalHeuristic);
 			return totalHeuristic;
 		}
 
