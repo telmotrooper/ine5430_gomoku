@@ -1,9 +1,20 @@
 class IA {
-	constructor(depth) {
+	constructor(depth, color) {
 		if(depth > 0) {
 			this.depth = depth;
 		} else {
 			console.log("Error: Depth has to be greater than 0.");
+		}
+
+		this.computerColor = null;
+		this.playerColor = null;
+
+		if(color == "white") {
+			this.playerColor = 2;	// White
+			this.computerColor = 1;	// Black
+		} else {
+			this.playerColor = 1;	// Black
+			this.computerColor = 2;	// White
 		}
 	}
 

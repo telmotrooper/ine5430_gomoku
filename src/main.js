@@ -5,7 +5,6 @@ $(document).ready(function() {
 	$("#pick-color").modal("show");
 	
 	b = new Board(15);
-	ia = new IA(2);
 	let matrix = b.getMatrix();
 
 	/* Drawing board from the matrix */
@@ -47,6 +46,8 @@ function pickColor(c) {
 	color = c;
 	playerColor = c;
 	$("#pick-color").modal("hide");
+
+	ia = new IA(2, c);
 
 	if(playerColor == "white") {
 		color = "black";
