@@ -23,7 +23,7 @@ class IA {
 
 		let emptySlots = this.getEmptySlots(ownMatrix);
 		
-		let playerHeuristic = this.heuristic(ownMatrix, this.getInverseColor(this.computerColor));
+		let playerHeuristic = this.heuristic(ownMatrix, this.playerColor);
 		
 		let possibleMoves = [];
 
