@@ -18,21 +18,20 @@ class IA {
 
 		let emptySlots = this.getEmptySlots(ownMatrix);
 		
-		let playerHeuristic = null;
-
-		if(lastMove != null) {
-			/* Calculate the heuristic for the board as it is */
-			playerHeuristic = this.heuristic(ownMatrix, lastMove, lastMove[2]);
-		} else {	// If the board is empty
-			playerHeuristic = 0;
-		}
+		let playerHeuristic = this.heuristic(ownMatrix, this.getInverseColor(computerColor));
 		
 		let possibleMoves = [];
 
 		/* Calculate the heuristic for each empty slot in the board */
 		for(let i = 0; i < emptySlots.length; i++) {
+			let x = emptySlots[i][0];
+			let y = emptySlots[i][1];
+
 			let ownMatrix = board.getMatrixCopy();
-			let computerHeuristic = this.heuristic(ownMatrix, emptySlots[i], computerColor);
+			ownMatrix[x][y] = computerColor;
+
+
+			let computerHeuristic = this.heuristic(ownMatrix, computerColor);
 			let totalHeuristic = computerHeuristic - playerHeuristic;
 
 			console.log(`Attempt at ${emptySlots[i][0]},${emptySlots[i][1]} has value ${totalHeuristic}`);
@@ -92,52 +91,47 @@ class IA {
 		return emptySlots;
 	}
 
-	heuristic(matrix, moveAttempt, color) {
+	heuristic(matrix, color) {
 		let heuristicValue = 0;
-		let x = parseInt(moveAttempt[0]);
-		let y = parseInt(moveAttempt[1]);
 
-		if(matrix[x][y] == "0") {	// If there's no piece in the square, put a piece there. Otherwise,
-			matrix[x][y] = color;	// the function will calculate the heuristic without making a move.
-		}
-
-		let horizontal = [];
-		for(let i = y - 5; i <= y + 5; i++) {
-			if(i >= 0 && i <= 14) {
-				horizontal.push(matrix[x][i]);
+		for(let y = 0; y < matrix.length; y++) {
+			for(let x = 0; x < matrix[y].length; x++) {
+				let horizontal = [];
+				for(let i = y - 5; i <= y + 5; i++) {
+					if(i >= 0 && i <= 14) {
+						horizontal.push(matrix[x][i]);
+					}
+				}
+				heuristicValue += this.countSequence(color, horizontal);
+		
+				let vertical = [];
+				for(let i = x - 5; i <= x + 5; i++) {
+					if(i >= 0 && i <= 14) {
+						vertical.push(matrix[i][y]);
+					}
+				}
+				heuristicValue += this.countSequence(color, vertical);
+		
+				let diagonalA = [];
+				for(let i = x - 5, j = y - 5; i <= x + 5; i++) {
+					if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
+						diagonalA.push(matrix[i][j]);
+					}
+					j += 1;
+				}
+				heuristicValue += this.countSequence(color, diagonalA);
+		
+				let diagonalB = [];
+				for(let i = x + 5, j = y - 5; i >= x - 5; i--) {
+					if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
+						diagonalB.push(matrix[i][j]);
+					}
+					j += 1;
+				}
+				heuristicValue += this.countSequence(color, diagonalB);
 			}
 		}
-		heuristicValue += this.countSequence(color, horizontal);
 
-		let vertical = [];
-		for(let i = x - 5; i <= x + 5; i++) {
-			if(i >= 0 && i <= 14) {
-				vertical.push(matrix[i][y]);
-			}
-		}
-		heuristicValue += this.countSequence(color, vertical);
-
-		let diagonalA = [];
-		for(let i = x - 5, j = y - 5; i <= x + 5; i++) {
-			if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
-				diagonalA.push(matrix[i][j]);
-			}
-			j += 1;
-		}
-		heuristicValue += this.countSequence(color, diagonalA);
-
-		let diagonalB = [];
-		for(let i = x + 5, j = y - 5; i >= x - 5; i--) {
-			if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
-				diagonalB.push(matrix[i][j]);
-			}
-			j += 1;
-		}
-		heuristicValue += this.countSequence(color, diagonalB);
-
-		// if(moveAttempt != null) {
-		// 	console.log(`Attempt at ${x},${y} has value ${heuristicValue}`);
-		// }
 		return heuristicValue;
 	}
 
