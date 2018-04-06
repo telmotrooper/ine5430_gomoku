@@ -134,6 +134,92 @@ class IA {
 		let hValue = 0;
 
 		// // HORIZONTAL; TODO Vertical -- so criar as variaveis e trocar x por y ao percorrer a matriz
+		
+		// \ diagonal parte de cima da matriz
+		
+		
+
+		console.log( "counter" );
+		console.log( counter );
+		// }
+		// for( let coluna = 0; coluna < 10; coluna ++ ){
+
+		// }
+
+		// for(let x = 0; x < matrix.length; x++) {
+		// 	for(let y = 0; y < matrix[x].length; y++) {
+
+		// 	}
+		// }
+
+		return hValue;
+	}
+
+	getVerticalValue(matrix, iaColor){
+		let hValue = 0;
+		for(let y = 0; y < matrix.length; y++) {
+			let xCount = 0;
+			let xLength = 0;
+			let xSpace = 0;
+			let xColor = 0;
+			let xBlocked = 0;
+			let xSpaceAfter = 0;
+			for(let x = 0; x < matrix[y].length; x++) {
+				if( xLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
+					break;
+				}
+				if( matrix[x][y] == 0 ){
+					if( xLength == 0){ // nenhuma tupla
+						continue;
+					}else{  // tupla com espaços;
+						xCount++;
+						xSpace++;
+						xSpaceAfter++;
+					}
+				}else{
+					if( xLength == 0 ){ // nova tupla
+						xCount = 1;
+						xLength = 1;
+						xColor = matrix[x][y];
+					}else{ // atualizar tupla
+						if( matrix[x][y] == xColor ){ // aumenta o length
+							xCount++;
+							xLength++;
+							xSpaceAfter = 0;
+							if( x < 5 ){
+								xBlocked = 1;
+							}
+						}else{ // blockeia // comeca nova
+							if( xBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
+												 // nao seram adicionadas tuplas blockeadas dos dois lados
+								xBlocked = 1;
+								hValue += this.getTupleValue( xLength, xSpace - xSpaceAfter, xBlocked, xColor, iaColor);
+							}
+							xCount = 1;
+							xLength = 1;
+							xBlocked = 1;
+							xSpace = 0;
+							xColor = matrix[x][y];
+							xSpaceAfter = 0;
+						}
+					}
+				}
+				if( xCount == 5 ){ //adiciona valor de tupla
+					hValue += this.getTupleValue( xLength, xSpace - xSpaceAfter, xBlocked, xColor, iaColor );
+					xCount = 0;
+					xLength = 0;
+					xColor = 0;
+					xBlocked = 0;
+					xSpace = 0;
+					xSpaceAfter = 0;
+				}
+			}
+		}
+		return hValue;
+	}
+
+	getHorizontallValue(matrix, iaColor){
+		let hValue = 0;
 		for(let x = 0; x < matrix.length; x++) {
 			let xCount = 0;
 			let xLength = 0;
@@ -192,7 +278,11 @@ class IA {
 				}
 			}
 		}
-		// \ diagonal parte de cima da matriz
+		return hValue;
+	}
+
+	getFirstDiagonalValue(matrix, iaColor){
+		let hValue = 0;
 		let coluna = 0;
 		let counter = 0;
 		for( let linha = 0; linha < 10; linha++ ){
@@ -279,6 +369,82 @@ class IA {
 				if( x > 14 || y > 14 ){
 					break; // supostamente e para parar apenas o 2 loop
 				}
+				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
+				// 	break;
+				// }
+				if( matrix[x][y] == 0 ){
+					if( dLength == 0){ // nenhuma tupla
+						continue;
+					}else{  // tupla com espaços;
+						dCount++;
+						dSpace++;
+						dSpaceAfter++;
+					}
+				}else{
+					if( dLength == 0 ){ // nova tupla
+						dCount = 1;
+						dLength = 1;
+						dColor = matrix[x][y];
+					}else{ // atualizar tupla
+						if( matrix[x][y] == dColor ){ // aumenta o length
+							dCount++;
+							dLength++;
+							dSpaceAfter = 0;
+							// if( x < 5 ){
+							// 	dBlocked = 1;
+							// }
+						}else{ // blockeia // comeca nova
+							if( dBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
+												 // nao seram adicionadas tuplas blockeadas dos dois lados
+								dBlocked = 1;
+								hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor);
+							}
+							dCount = 1;
+							dLength = 1;
+							dBlocked = 1;
+							dSpace = 0;
+							dColor = matrix[x][y];
+							dSpaceAfter = 0;
+						}
+					}
+				}
+				if( dCount == 5 ){ //adiciona valor de tupla
+					hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor );
+					dCount = 0;
+					dLength = 0;
+					dColor = 0;
+					dBlocked = 0;
+					dSpace = 0;
+					dSpaceAfter = 0;
+				}
+				if( matrix[coluna + i ][ linha + i] == 1){
+					counter++;
+				}
+			}
+			if( dLength > 0 ){
+				hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor );
+			}
+		}
+		return hValue;
+	}
+
+	getFirstDiagonalValue(matrix, iaColor){
+		let hValue = 0;
+		let coluna = 0;
+		let counter = 0;
+		for( let linha = 0; linha < 10; linha++ ){
+			let dCount = 0;
+			let dLength = 0;
+			let dSpace = 0;
+			let dColor = 0;
+			let dBlocked = 0;
+			let dSpaceAfter = 0;
+			for( let i = 0; i < matrix.length; i++ ){
+				let x = 14 - coluna - i;
+				let y = linha + i; 
+				if( x < 0 || y < 0 ){
+					break; // supostamente e para parar apenas o 2 loop
+				}
 
 				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
 				// 	break;
@@ -336,21 +502,76 @@ class IA {
 				hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor );
 			}
 		}
-		
-
-		console.log( "counter" );
-		console.log( counter );
-		// }
-		// for( let coluna = 0; coluna < 10; coluna ++ ){
-
-		// }
-
-		// for(let x = 0; x < matrix.length; x++) {
-		// 	for(let y = 0; y < matrix[x].length; y++) {
-
-		// 	}
-		// }
-
+		let linha = 0;
+		for( coluna = 1; coluna < 10; coluna++ ){
+			let dCount = 0;
+			let dLength = 0;
+			let dSpace = 0;
+			let dColor = 0;
+			let dBlocked = 0;
+			let dSpaceAfter = 0;
+			for( let i = 0; i < matrix.length; i++ ){
+				let x = 14 -coluna - i;
+				let y = linha + i; 
+				if( x < 0 || y < 0 ){
+					break; // supostamente e para parar apenas o 2 loop
+				}
+				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
+				// 	break;
+				// }
+				if( matrix[x][y] == 0 ){
+					if( dLength == 0){ // nenhuma tupla
+						continue;
+					}else{  // tupla com espaços;
+						dCount++;
+						dSpace++;
+						dSpaceAfter++;
+					}
+				}else{
+					if( dLength == 0 ){ // nova tupla
+						dCount = 1;
+						dLength = 1;
+						dColor = matrix[x][y];
+					}else{ // atualizar tupla
+						if( matrix[x][y] == dColor ){ // aumenta o length
+							dCount++;
+							dLength++;
+							dSpaceAfter = 0;
+							// if( x < 5 ){
+							// 	dBlocked = 1;
+							// }
+						}else{ // blockeia // comeca nova
+							if( dBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
+												 // nao seram adicionadas tuplas blockeadas dos dois lados
+								dBlocked = 1;
+								hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor);
+							}
+							dCount = 1;
+							dLength = 1;
+							dBlocked = 1;
+							dSpace = 0;
+							dColor = matrix[x][y];
+							dSpaceAfter = 0;
+						}
+					}
+				}
+				if( dCount == 5 ){ //adiciona valor de tupla
+					hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor );
+					dCount = 0;
+					dLength = 0;
+					dColor = 0;
+					dBlocked = 0;
+					dSpace = 0;
+					dSpaceAfter = 0;
+				}
+				if( matrix[coluna + i ][ linha + i] == 1){
+					counter++;
+				}
+			}
+			if( dLength > 0 ){
+				hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor );
+			}
+		}
 		return hValue;
 	}
 
