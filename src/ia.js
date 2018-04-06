@@ -26,7 +26,6 @@ class IA {
 
 	getEmptySlots(matrix) {
 		let emptySlots = [];
-
 		for(let x = 0; x < matrix.length; x++) {
 			for(let y = 0; y < matrix[x].length; y++) {
 				if( this.itsGoodToPlay(matrix, x, y) ) {
@@ -37,7 +36,6 @@ class IA {
 		if( emptySlots.length == 0 ){
 			emptySlots.push([7,7]);
 		}
-
 		return emptySlots;
 	}
 
@@ -45,7 +43,6 @@ class IA {
 		if( matrix[x][y] != 0 ){
 			return false;
 		}
-
 		if( ( x + 1 < 15 && matrix[x + 1][y] != 0 )|| 
 			( x - 1 > 0 && matrix[x - 1][y] != 0 )||
 			( y + 1 < 15 && matrix[x][y + 1] != 0 )||
@@ -59,96 +56,12 @@ class IA {
 		return false;
 	}
 
-	// heuristic(matrix, color) {
-	// 	let heuristicValue = 0;
-
-	// 	for(let y = 0; y < matrix.length; y++) {
-	// 		for(let x = 0; x < matrix[y].length; x++) {
-	// 			let horizontal = [];
-	// 			for(let i = y - 5; i <= y + 5; i++) {
-	// 				if(i >= 0 && i <= 14) {
-	// 					horizontal.push(matrix[x][i]);
-	// 				}
-	// 			}
-	// 			heuristicValue += this.countSequence(color, horizontal);
-		
-	// 			let vertical = [];
-	// 			for(let i = x - 5; i <= x + 5; i++) {
-	// 				if(i >= 0 && i <= 14) {
-	// 					vertical.push(matrix[i][y]);
-	// 				}
-	// 			}
-	// 			heuristicValue += this.countSequence(color, vertical);
-		
-	// 			let diagonalA = [];
-	// 			for(let i = x - 5, j = y - 5; i <= x + 5; i++) {
-	// 				if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
-	// 					diagonalA.push(matrix[i][j]);
-	// 				}
-	// 				j += 1;
-	// 			}
-	// 			heuristicValue += this.countSequence(color, diagonalA);
-		
-	// 			let diagonalB = [];
-	// 			for(let i = x + 5, j = y - 5; i >= x - 5; i--) {
-	// 				if(i >= 0 && i <= 14 && j >= 0 && j <= 14) {
-	// 					diagonalB.push(matrix[i][j]);
-	// 				}
-	// 				j += 1;
-	// 			}
-	// 			heuristicValue += this.countSequence(color, diagonalB);
-	// 		}
-	// 	}
-
-	// 	return heuristicValue;
-	// }
-
-	testHeristic(){
-		let matrix = [
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-		];
-
-		console.log( "HEURISTIC" );
-		console.log( this.heuristic(matrix, 1) );
-	}
-
 	heuristic( matrix, iaColor ){
 		let hValue = 0;
-
-		// // HORIZONTAL; TODO Vertical -- so criar as variaveis e trocar x por y ao percorrer a matriz
-		
-		// \ diagonal parte de cima da matriz
-		
 		hValue += this.getVerticalValue( matrix, iaColor);
 		hValue += this.getHorizontallValue( matrix, iaColor);
-
-		// console.log( "hValue" );
-		// console.log( hValue );
-		// }
-		// for( let coluna = 0; coluna < 10; coluna ++ ){
-
-		// }
-
-		// for(let x = 0; x < matrix.length; x++) {
-		// 	for(let y = 0; y < matrix[x].length; y++) {
-
-		// 	}
-		// }
-
+		hValue += this.getFirstDiagonalValue( matrix, iaColor);
+		hValue += this.getSecundDiagonalValue( matrix, iaColor);
 		return hValue;
 	}
 
@@ -225,7 +138,7 @@ class IA {
 			let xBlocked = 0;
 			let xSpaceAfter = 0;
 			for(let y = 0; y < matrix[x].length; y++) {
-				if( xLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
+				if( xLength == 0 && y > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
 					break;
 				}
 				if( matrix[x][y] == 0 ){
@@ -293,12 +206,11 @@ class IA {
 				let x = coluna + i;
 				let y = linha + i; 
 				if( x > 14 || y > 14 ){
-					break; // supostamente e para parar apenas o 2 loop
+					break;
 				}
-
-				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
-				// 	break;
-				// }
+				if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
+					break;
+				}
 				if( matrix[x][y] == 0 ){
 					if( dLength == 0){ // nenhuma tupla
 						continue;
@@ -317,9 +229,9 @@ class IA {
 							dCount++;
 							dLength++;
 							dSpaceAfter = 0;
-							// if( x < 5 ){
-							// 	dBlocked = 1;
-							// }
+							if( x < 5 ){
+								dBlocked = 1;
+							}
 						}else{ // blockeia // comeca nova
 							if( dBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
 												 // nao seram adicionadas tuplas blockeadas dos dois lados
@@ -366,9 +278,9 @@ class IA {
 				if( x > 14 || y > 14 ){
 					break; // supostamente e para parar apenas o 2 loop
 				}
-				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
-				// 	break;
-				// }
+				if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
+					break;
+				}
 				if( matrix[x][y] == 0 ){
 					if( dLength == 0){ // nenhuma tupla
 						continue;
@@ -387,9 +299,9 @@ class IA {
 							dCount++;
 							dLength++;
 							dSpaceAfter = 0;
-							// if( x < 5 ){
-							// 	dBlocked = 1;
-							// }
+							if( x < 5 ){
+								dBlocked = 1;
+							}
 						}else{ // blockeia // comeca nova
 							if( dBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
 												 // nao seram adicionadas tuplas blockeadas dos dois lados
@@ -427,7 +339,6 @@ class IA {
 
 	getSecundDiagonalValue(matrix, iaColor){
 		let hValue = 0;
-		let coluna = 0;
 		let counter = 0;
 		for( let linha = 14; linha >= 4; linha-- ){
 			let dCount = 0;
@@ -437,19 +348,14 @@ class IA {
 			let dBlocked = 0;
 			let dSpaceAfter = 0;
 			for( let i = 0; i < matrix.length; i++ ){
-				let x = 14 - i;
-				let y = linha - i; 
-				if( x < 0 || y < 0 ){
+				let x = linha - i;
+				let y = i; 
+				if( x < 0){
 					break;
 				}
-
 				if(matrix[x][y] != 0 ){
 					counter++;
 				}
-
-				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
-				// 	break;
-				// }
 				if( matrix[x][y] == 0 ){
 					if( dLength == 0){ // nenhuma tupla
 						continue;
@@ -468,9 +374,6 @@ class IA {
 							dCount++;
 							dLength++;
 							dSpaceAfter = 0;
-							// if( x < 5 ){
-							// 	dBlocked = 1;
-							// }
 						}else{ // blockeia // comeca nova
 							if( dBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
 												 // nao seram adicionadas tuplas blockeadas dos dois lados
@@ -503,10 +406,7 @@ class IA {
 				hValue += this.getTupleValue( dLength, dSpace - dSpaceAfter, dBlocked, dColor, iaColor );
 			}
 		}
-		let linha = 0;
-			console.log('counter' );
-	console.log(counter );
-		for( coluna = 9; coluna >= 4; coluna-- ){
+		for( let coluna = 1; coluna < 11; coluna++ ){
 			let dCount = 0;
 			let dLength = 0;
 			let dSpace = 0;
@@ -514,14 +414,11 @@ class IA {
 			let dBlocked = 0;
 			let dSpaceAfter = 0;
 			for( let i = 0; i < matrix.length; i++ ){
-				let x =coluna - i;
-				let y = 14 - i; 
-				if( x < 0 || y < 0 ){
-					break; // supostamente e para parar apenas o 2 loop
+				let x = 14 - i;
+				let y = coluna + i;
+				if( x < 0 || y > 14 ){
+					break;
 				}
-				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
-				// 	break;
-				// }
 				if( matrix[x][y] == 0 ){
 					if( dLength == 0){ // nenhuma tupla
 						continue;
@@ -540,9 +437,6 @@ class IA {
 							dCount++;
 							dLength++;
 							dSpaceAfter = 0;
-							// if( x < 5 ){
-							// 	dBlocked = 1;
-							// }
 						}else{ // blockeia // comeca nova
 							if( dBlocked == 0 ){ //adiciona tupla blockead // caso xBlocked != 0 quer diser que a tupla ja estava blockeada 
 												 // nao seram adicionadas tuplas blockeadas dos dois lados
@@ -598,16 +492,16 @@ class IA {
 		let value = 0;
 		switch (length){
 			case 2:
-				value =	50;
+				value =	600;
 			break;
 			case 3:
-				value =	100;
+				value =	600*300;
 			break;
 			case 4:
-				value =	200;
+				value =	600*300*150;
 			break;
 			case 5:
-				value =	500;
+				value =	600*300*150*150;
 		}
 		return value;
 	}
@@ -618,7 +512,6 @@ class IA {
 
 	getComputerColor(lastMove) {	// Finds out the color of the pieces controlled by the computer
 		let color = null;
-
 		if(lastMove == null) {
 			color = 1;	// The first to play is always black (value: 1)
 		} else {
@@ -633,7 +526,6 @@ class IA {
 				color = 1;
 			}
 		}
-
 		return color;
 	}
 
@@ -691,7 +583,6 @@ class IA {
 
 	minimax(node, depth, alpha, beta, maximizing)
 	{
-		console.log("minimax");
 		let v = Number.MIN_SAFE_INTEGER;
 		let children = this.getEmptySlots(node);
 		let bestPlay = [];
@@ -722,14 +613,9 @@ class IA {
 		return bestPlay;
 	}
 	/* Based on pseudocode from: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning#Pseudocode */
-	minimaxNext(node, depth, alpha, beta, maximizing) {
-		// console.log("Time to minimax!");
-		
+	minimaxNext(node, depth, alpha, beta, maximizing) {		
 		if(depth == 0) {
-			let computerHeuristic = this.heuristic(node, this.computerColor);
-			let playerHeuristic = this.heuristic(node, this.playerColor);
-			let totalHeuristic = computerHeuristic - playerHeuristic;
-
+			let totalHeuristic = this.heuristic(node, this.computerColor);
 			return totalHeuristic;
 		}
 

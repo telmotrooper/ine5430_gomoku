@@ -47,7 +47,9 @@ function pickColor(c) {
 	playerColor = c;
 	$("#pick-color").modal("hide");
 
-	ia = new IA(2, c);
+	let depth = parseInt($("#depth").val());
+
+	ia = new IA(depth, c);
 
 	if(playerColor == "white") {
 		color = "black";
