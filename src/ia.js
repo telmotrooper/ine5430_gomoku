@@ -106,13 +106,13 @@ class IA {
 	testHeristic(){
 		let matrix = [
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -121,10 +121,6 @@ class IA {
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 		];
-
-		console.log( matrix );
-		console.log( "Possible Plays" );
-		console.log( this.getEmptySlots(matrix) );
 
 		console.log( "HEURISTIC" );
 		console.log( this.heuristic(matrix, 1) );
@@ -137,10 +133,10 @@ class IA {
 		
 		// \ diagonal parte de cima da matriz
 		
-		
+		hValue = this.getSecundDiagonalValue( matrix, iaColor);
 
-		console.log( "counter" );
-		console.log( counter );
+		console.log( "hValue" );
+		console.log( hValue );
 		// }
 		// for( let coluna = 0; coluna < 10; coluna ++ ){
 
@@ -428,11 +424,11 @@ class IA {
 		return hValue;
 	}
 
-	getFirstDiagonalValue(matrix, iaColor){
+	getSecundDiagonalValue(matrix, iaColor){
 		let hValue = 0;
 		let coluna = 0;
 		let counter = 0;
-		for( let linha = 0; linha < 10; linha++ ){
+		for( let linha = 14; linha >= 4; linha-- ){
 			let dCount = 0;
 			let dLength = 0;
 			let dSpace = 0;
@@ -440,10 +436,14 @@ class IA {
 			let dBlocked = 0;
 			let dSpaceAfter = 0;
 			for( let i = 0; i < matrix.length; i++ ){
-				let x = 14 - coluna - i;
-				let y = linha + i; 
+				let x = 14 - i;
+				let y = linha - i; 
 				if( x < 0 || y < 0 ){
-					break; // supostamente e para parar apenas o 2 loop
+					break;
+				}
+
+				if(matrix[x][y] != 0 ){
+					counter++;
 				}
 
 				// if( dLength == 0 && x > 10 ){ // nao haveram tuplas validas caso nao tenha começado antes do 10
@@ -503,7 +503,9 @@ class IA {
 			}
 		}
 		let linha = 0;
-		for( coluna = 1; coluna < 10; coluna++ ){
+			console.log('counter' );
+	console.log(counter );
+		for( coluna = 9; coluna >= 4; coluna-- ){
 			let dCount = 0;
 			let dLength = 0;
 			let dSpace = 0;
@@ -511,8 +513,8 @@ class IA {
 			let dBlocked = 0;
 			let dSpaceAfter = 0;
 			for( let i = 0; i < matrix.length; i++ ){
-				let x = 14 -coluna - i;
-				let y = linha + i; 
+				let x =coluna - i;
+				let y = 14 - i; 
 				if( x < 0 || y < 0 ){
 					break; // supostamente e para parar apenas o 2 loop
 				}
@@ -574,6 +576,7 @@ class IA {
 		}
 		return hValue;
 	}
+
 
 	getTupleValue(length, spaces, blocked, color, iaColor){
 		let value = 0;
