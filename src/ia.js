@@ -109,7 +109,7 @@ class IA {
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[ 0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
 			[ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -133,10 +133,11 @@ class IA {
 		
 		// \ diagonal parte de cima da matriz
 		
-		hValue = this.getSecundDiagonalValue( matrix, iaColor);
+		hValue += this.getVerticalValue( matrix, iaColor);
+		hValue += this.getHorizontallValue( matrix, iaColor);
 
-		console.log( "hValue" );
-		console.log( hValue );
+		// console.log( "hValue" );
+		// console.log( hValue );
 		// }
 		// for( let coluna = 0; coluna < 10; coluna ++ ){
 
@@ -494,7 +495,7 @@ class IA {
 					dSpace = 0;
 					dSpaceAfter = 0;
 				}
-				if( matrix[coluna + i ][ linha + i] == 1){
+				if( matrix[x][y] == 1){
 					counter++;
 				}
 			}
@@ -565,9 +566,6 @@ class IA {
 					dBlocked = 0;
 					dSpace = 0;
 					dSpaceAfter = 0;
-				}
-				if( matrix[coluna + i ][ linha + i] == 1){
-					counter++;
 				}
 			}
 			if( dLength > 0 ){
