@@ -2,29 +2,33 @@ $(document).ready(function() {
 	color = null;
 	playerColor = null;
 
-	$("#pick-color").modal("show");
+	// $("#pick-color").modal("show");
 	
-	b = new Board(15);
-	let matrix = b.getMatrix();
+	// b = new Board(15);
+	// let matrix = b.getMatrix();
+	
+	///TODO:: REMOVE THIS 
+	ia = new IA(2, 1);
+	ia.testHeristic();
 
-	/* Drawing board from the matrix */
-	matrix.forEach(function(column, i) {
-		$("#board").append(`<tr id="row-${i}"></tr>`);
-		column.forEach(function(square, j) {
-			$(`#row-${i}`).append(`<td id="square-${i}-${j}">0</td>`);
-		});
-	});
+	// /* Drawing board from the matrix */
+	// matrix.forEach(function(column, i) {
+	// 	$("#board").append(`<tr id="row-${i}"></tr>`);
+	// 	column.forEach(function(square, j) {
+	// 		$(`#row-${i}`).append(`<td id="square-${i}-${j}">0</td>`);
+	// 	});
+	// });
 
-	/* Dealing with click event */
-	$("td").click(function(event) {
-		let position = String(event.target.id).split("-");
-		let x = position[1];
-		let y = position[2];
+	// /* Dealing with click event */
+	// $("td").click(function(event) {
+	// 	let position = String(event.target.id).split("-");
+	// 	let x = position[1];
+	// 	let y = position[2];
 
-		if(b.getColor(x,y) == "blank") {
-			play(x, y);
-		}
-	});
+	// 	if(b.getColor(x,y) == "blank") {
+	// 		play(x, y);
+	// 	}
+	// });
 });
 
 function checkVictory(x, y) {
