@@ -32,11 +32,23 @@
 				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title margin-auto">Escolha uma cor</h5>
+							<h5 class="modal-title margin-auto">Opções de jogo</h5>
 						</div>
 						<div class="modal-body text-center">
-							<a onclick="pickColor('black')"><img class="img-fluid w-10" src="img/black-piece.png" alt="black"></a>
-							<a onclick="pickColor('white')"><img class="img-fluid w-10" src="img/white-piece.png" alt="white"></a>
+							<label>Profundidade:</label>
+							<p>
+								<select name="game-depth" id="depth">
+									<option value="1">1 (rápido)</option>
+									<option value="2">2 (devagar)</option>
+									<option value="3">3 (muito devagar)</option>
+								</select>
+							</p>
+							
+							<label>Escolha uma cor:</label>
+							<p>
+								<a onclick="pickColor('black')"><img class="img-fluid w-10" src="img/black-piece.png" alt="black"></a>
+								<a onclick="pickColor('white')"><img class="img-fluid w-10" src="img/white-piece.png" alt="white"></a>
+							</p>
 						</div>
 						<div class="modal-footer">
 							<p class="margin-auto"><strong>Observação:</strong> A peça preta é a que começa o jogo.</p>
