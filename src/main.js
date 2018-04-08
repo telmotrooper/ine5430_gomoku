@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	color = null;
 	playerColor = null;
+	endGame = false;
 
 	$("#pick-color").modal("show");
 	
@@ -17,18 +18,23 @@ $(document).ready(function() {
 
 	/* Dealing with click event */
 	$("td").click(function(event) {
-		let position = String(event.target.id).split("-");
-		let x = position[1];
-		let y = position[2];
-
-		if(b.getColor(x,y) == "blank") {
-			play(x, y);
+		if(!endGame) {
+			let position = String(event.target.id).split("-");
+			let x = position[1];
+			let y = position[2];
+	
+			if(b.getColor(x,y) == "blank") {
+				play(x, y);
+			}
+		} else {
+			$("#end-game").modal("show");
 		}
 	});
 });
 
 function checkVictory(x, y) {
 	if(b.checkVictory(x, y)) {
+		endGame = true;
 		if(b.getColor(x,y) == playerColor) {
 			$("#end-game-header").text("Você venceu!");
 		} else {
@@ -87,4 +93,8 @@ function computerPlay() {
 	// b.printMatrix();
 	switchColor();
 	checkVictory(iaMove[0], iaMove[1]);
+}
+
+function lookBoard() {
+	$("#end-game").modal("hide");
 }
