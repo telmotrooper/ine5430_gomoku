@@ -15,6 +15,13 @@ table {
 	background-image: url("../img/board-tile.png");
 }
 
+.fork-me {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: 0;
+}
+
 #square-7-7 {
 	background-image: url("../img/center-tile.png");
 }
